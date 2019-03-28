@@ -51,7 +51,7 @@ Future getHomePageBeloConten() async {
 }
 
 // 封装请求方法
-Future request(url, formDadta) async {
+Future request(url, {formData}) async {
   try {
     print('*****开始获取数据******');
 
@@ -59,10 +59,10 @@ Future request(url, formDadta) async {
     Dio dio = new Dio();
     dio.options.contentType =
         ContentType.parse("application/x-www-form-urlencoded");
-    if (formDadta == null) {
+    if (formData == null) {
       response = await dio.post(servicePath[url]);
     } else {
-      response = await dio.post(servicePath[url], data: formDadta);
+      response = await dio.post(servicePath[url], data: formData);
     }
 
     if (response.statusCode == 200) {
