@@ -10,13 +10,14 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
-
+class _HomePageState extends State<HomePage>
+    with AutomaticKeepAliveClientMixin {
   int page = 1;
   List<Map> hotGoodsList = [];
 
-  GlobalKey<RefreshFooterState> _footerkey = new GlobalKey<RefreshFooterState>();
-    
+  GlobalKey<RefreshFooterState> _footerkey =
+      new GlobalKey<RefreshFooterState>();
+
   @override
   bool get wantKeepAlive => true;
 
@@ -32,96 +33,106 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
   Widget build(BuildContext context) {
     var formData = {'lon': '115.02932', 'lat': '35.76189'};
     return Scaffold(
-        appBar: AppBar(
-          title: Text('百姓生活+'),
-        ),
-        body: FutureBuilder(
-          // 动态渲染组件
-          future: request('homePageContent', formData: formData), // 异步方法
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              // 数据处理
-              var data = json.decode(snapshot.data.toString());
-              List<Map> swiper =
-                  (data['data']['slides'] as List).cast(); // 顶部轮播组件数
-              List<Map> navigatorList =
-                  (data['data']['category'] as List).cast();
-              String adPicUrl =
-                  data['data']['advertesPicture']['PICTURE_ADDRESS'];
-              String leaderImage = data['data']['shopInfo']['leaderImage'];
-              String leaderPhone = data['data']['shopInfo']['leaderPhone'];
-              List<Map> recommendList =
-                  (data['data']['recommend'] as List).cast();
-              String floor1Title = data['data']['floor1Pic']['PICTURE_ADDRESS'];
-              String floor2Title = data['data']['floor2Pic']['PICTURE_ADDRESS'];
-              String floor3Title = data['data']['floor3Pic']['PICTURE_ADDRESS'];
-              List<Map> floor1 = (data['data']['floor1'] as List).cast();
-              List<Map> floor2 = (data['data']['floor2'] as List).cast();
-              List<Map> floor3 = (data['data']['floor3'] as List).cast();
+      appBar: AppBar(
+        title: Text('百姓生活+'),
+      ),
+      body: FutureBuilder(
+        // 动态渲染组件
+        future: request('homePageContent', formData: formData), // 异步方法
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            // 数据处理
+            var data = json.decode(snapshot.data.toString());
+            List<Map> swiper =
+                (data['data']['slides'] as List).cast(); // 顶部轮播组件数
+            List<Map> navigatorList = (data['data']['category'] as List).cast();
+            String adPicUrl =
+                data['data']['advertesPicture']['PICTURE_ADDRESS'];
+            String leaderImage = data['data']['shopInfo']['leaderImage'];
+            String leaderPhone = data['data']['shopInfo']['leaderPhone'];
+            List<Map> recommendList =
+                (data['data']['recommend'] as List).cast();
+            String floor1Title = data['data']['floor1Pic']['PICTURE_ADDRESS'];
+            String floor2Title = data['data']['floor2Pic']['PICTURE_ADDRESS'];
+            String floor3Title = data['data']['floor3Pic']['PICTURE_ADDRESS'];
+            List<Map> floor1 = (data['data']['floor1'] as List).cast();
+            List<Map> floor2 = (data['data']['floor2'] as List).cast();
+            List<Map> floor3 = (data['data']['floor3'] as List).cast();
 
-              return EasyRefresh(
-                refreshFooter: ClassicsFooter(
-                  key: _footerkey,
-                  bgColor: Colors.white,
-                  textColor: Colors.pink,
-                  moreInfoColor: Colors.pink,
-                  showMore: true,
-                  noMoreText: '',
-                  moreInfo: '加载中',
-                  loadReadyText: '上拉加载…………',
-                ),
-                child: ListView(
-                  children: <Widget>[
-                    SwiperDiy(swiperDataList: swiper),
-                    TopNavigator(navigatorList: navigatorList),
-                    AdBanner(adPicture: adPicUrl),
-                    LeaderPhone(
-                        leaderImage: leaderImage, leaderPhone: leaderPhone),
-                    Recommend(
-                      recommendList: recommendList,
-                    ),
-                    FloorTitle(picture_address: floor1Title,),
-                    FloorContent(floorGoodsList: floor1,),
-                    FloorTitle(picture_address: floor2Title,),
-                    FloorContent(floorGoodsList: floor2,),
-                    FloorTitle(picture_address: floor3Title,),
-                    FloorContent(floorGoodsList: floor3,),
-                    _hotGoods()
-                  ],
-                ),
-                loadMore: ()async {
-                  print('开始加载更多');
-                  // 获取火爆专区商品数据
-                  var formData = {'page':page};
-                  await request('homePageBelowConten', formData:formData).then((val){
-                    var data = json.decode(val.toString());
-                    List<Map> newGoodsList = (data['data'] as List).cast();
-                    setState(() {
+            return EasyRefresh(
+              refreshFooter: ClassicsFooter(
+                key: _footerkey,
+                bgColor: Colors.white,
+                textColor: Colors.pink,
+                moreInfoColor: Colors.pink,
+                showMore: true,
+                noMoreText: '',
+                moreInfo: '加载中',
+                loadReadyText: '上拉加载…………',
+              ),
+              child: ListView(
+                children: <Widget>[
+                  SwiperDiy(swiperDataList: swiper),
+                  TopNavigator(navigatorList: navigatorList),
+                  AdBanner(adPicture: adPicUrl),
+                  LeaderPhone(
+                      leaderImage: leaderImage, leaderPhone: leaderPhone),
+                  Recommend(
+                    recommendList: recommendList,
+                  ),
+                  FloorTitle(
+                    picture_address: floor1Title,
+                  ),
+                  FloorContent(
+                    floorGoodsList: floor1,
+                  ),
+                  FloorTitle(
+                    picture_address: floor2Title,
+                  ),
+                  FloorContent(
+                    floorGoodsList: floor2,
+                  ),
+                  FloorTitle(
+                    picture_address: floor3Title,
+                  ),
+                  FloorContent(
+                    floorGoodsList: floor3,
+                  ),
+                  _hotGoods()
+                ],
+              ),
+              loadMore: () async {
+                print('开始加载更多');
+                // 获取火爆专区商品数据
+                var formData = {'page': page};
+                await request('homePageBelowConten', formData: formData)
+                    .then((val) {
+                  var data = json.decode(val.toString());
+                  List<Map> newGoodsList = (data['data'] as List).cast();
+                  setState(() {
                     hotGoodsList.addAll(newGoodsList);
                     page++;
-                    });
                   });
-                },
-              );
-              
-            } else {
-              return Center(
-                child: Text('加载中……'),
-              );
-            }
-          }, // 异步方法进行时的操作,接收2个参数
-        ),
-      );
+                });
+              },
+            );
+          } else {
+            return Center(
+              child: Text('加载中……'),
+            );
+          }
+        }, // 异步方法进行时的操作,接收2个参数
+      ),
+    );
   }
 
 // 火爆专区标题
-  Widget hotTitle =Container(
+  Widget hotTitle = Container(
     margin: EdgeInsets.only(top: 10.0),
     alignment: Alignment.center,
     color: Colors.transparent,
     child: Text('火爆专区'),
   );
-
 
 // 流式布局火爆专区的商品
   Widget _wrapList() {
@@ -136,15 +147,16 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
             margin: EdgeInsets.only(bottom: 3.0),
             child: Column(
               children: <Widget>[
-                Image.network(val['image'], width: ScreenUtil().setWidth(370),),
+                Image.network(
+                  val['image'],
+                  width: ScreenUtil().setWidth(370),
+                ),
                 Text(
                   val['name'],
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    color: Colors.pink,
-                    fontSize: ScreenUtil().setSp(26)
-                  ),
+                      color: Colors.pink, fontSize: ScreenUtil().setSp(26)),
                 ),
                 Row(
                   children: <Widget>[
@@ -152,9 +164,8 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
                     Text(
                       '￥${val['price']}',
                       style: TextStyle(
-                        color: Colors.black26,
-                        decoration: TextDecoration.lineThrough
-                      ),
+                          color: Colors.black26,
+                          decoration: TextDecoration.lineThrough),
                     )
                   ],
                 )
@@ -163,7 +174,6 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
           ),
         );
       }).toList();
-
 
       // 流式布局
       return Wrap(
@@ -178,10 +188,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
   Widget _hotGoods() {
     return Container(
       child: Column(
-        children: <Widget>[
-          hotTitle,
-          _wrapList()
-        ],
+        children: <Widget>[hotTitle, _wrapList()],
       ),
     );
   }
@@ -324,7 +331,7 @@ class Recommend extends StatelessWidget {
     return InkWell(
       onTap: () {},
       child: Container(
-        height: ScreenUtil().setHeight(330),
+        height: ScreenUtil().setHeight(350),
         width: ScreenUtil().setWidth(250),
         padding: EdgeInsets.all(8.0),
         decoration: BoxDecoration(
@@ -350,7 +357,7 @@ class Recommend extends StatelessWidget {
   // 横向列表方法
   Widget _recommedList() {
     return Container(
-      height: ScreenUtil().setHeight(350),
+      height: ScreenUtil().setHeight(360),
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: recommendList.length,
@@ -364,7 +371,7 @@ class Recommend extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: ScreenUtil().setHeight(410),
+      height: ScreenUtil().setHeight(420),
       margin: EdgeInsets.only(top: 10.0),
       child: Column(
         children: <Widget>[_titleWidget(), _recommedList()],
@@ -438,4 +445,3 @@ class FloorContent extends StatelessWidget {
     );
   }
 }
-
