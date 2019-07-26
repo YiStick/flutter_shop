@@ -1,10 +1,10 @@
 /*
- * @Descripttion: 构建数据模型
+ * @Descripttion: 商品分类导航得数据模型
  * @version: 1.0
  * @Author: Stick
  * @Date: 2019-07-21 17:33:35
  * @LastEditors: Stick
- * @LastEditTime: 2019-07-21 17:35:28
+ * @LastEditTime: 2019-07-25 23:10:14
  */
 
 class CategoryModel {
